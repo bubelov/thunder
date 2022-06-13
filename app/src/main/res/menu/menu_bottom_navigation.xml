@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/paymentsFragment"
+        android:icon="@drawable/baseline_currency_bitcoin_24"
+        android:title="Payments"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/channelsFragment"
+        android:icon="@drawable/baseline_balance_24"
+        android:title="Channels"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/logsFragment"
+        android:icon="@drawable/baseline_history_24"
+        android:title="Logs"
+        app:showAsAction="ifRoom" />
+
+</menu>

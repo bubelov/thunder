@@ -3,4 +3,7 @@
     <string name="connecting_to_tor_network">Connecting to Tor network</string>
     <string name="loading_data">Loading data</string>
     <string name="s_sats">%s sats</string>
+    <string name="payments">Payments</string>
+    <string name="channels">Channels</string>
+    <string name="logs">Logs</string>
 </resources>

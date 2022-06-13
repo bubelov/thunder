@@ -78,4 +78,8 @@ dependencies {
     implementation("io.grpc:grpc-protobuf-lite:$grpcVer")
     implementation("io.grpc:grpc-stub:$grpcVer")
     compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
+
+    def navVer = "2.4.2"
+    implementation("androidx.navigation:navigation-fragment-ktx:$navVer")
+    implementation("androidx.navigation:navigation-ui-ktx:$navVer")
 }
