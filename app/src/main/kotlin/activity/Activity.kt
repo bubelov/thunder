@@ -22,8 +22,6 @@ class Activity : AppCompatActivity() {
         setContentView(view)
 
         binding.bottomNavigation.setOnItemSelectedListener {
-            //binding.bottomNavigation.selectedItemId = it.itemId
-
             when (it.itemId) {
                 R.id.paymentsFragment -> {
                     navController.navigate(R.id.paymentsFragment)
@@ -31,10 +29,6 @@ class Activity : AppCompatActivity() {
 
                 R.id.channelsFragment -> {
                     navController.navigate(R.id.channelsFragment)
-                }
-
-                R.id.logsFragment -> {
-                    navController.navigate(R.id.logsFragment)
                 }
             }
 

@@ -88,7 +88,7 @@ class PaymentsFragment : Fragment() {
                     }
                 }
             }
-        }.launchIn(lifecycleScope)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun onDestroyView() {

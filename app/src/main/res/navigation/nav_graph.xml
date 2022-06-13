@@ -18,10 +18,4 @@
         android:label="ChannelsFragment"
         tools:layout="@layout/fragment_channels" />
 
-    <fragment
-        android:id="@+id/logsFragment"
-        android:name="logs.LogsFragment"
-        android:label="LogsFragment"
-        tools:layout="@layout/fragment_logs" />
-
 </navigation>
