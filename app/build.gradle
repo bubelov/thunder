@@ -1,0 +1,81 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'com.google.protobuf' version '0.8.18'
+}
+
+android {
+    compileSdk = 31
+
+    defaultConfig {
+        applicationId = "com.bubelov.thunder"
+        minSdk = 30
+        targetSdk = 31
+        versionCode = 1
+        versionName = "0.1"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+
+    buildFeatures {
+        viewBinding = true
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.19.2"
+    }
+
+    plugins {
+        grpc {
+            artifact = "io.grpc:protoc-gen-grpc-java:1.47.0"
+        }
+    }
+
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java { option "lite" }
+            }
+            task.plugins {
+                grpc { option "lite" }
+            }
+        }
+    }
+}
+
+dependencies {
+    // Tor service
+    implementation("info.guardianproject:tor-android:0.4.7.7")
+
+    // Allows controlling a Tor instance via its control port
+    implementation("info.guardianproject:jtorctl:0.4.5.7")
+
+    // Material Design components
+    implementation("com.google.android.material:material:1.6.1")
+
+    // Helps to flatten view hierarchies
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+    // Modern HTTP client
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+
+    // Adds lifecycle-aware coroutine scopes
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+
+    // RPC framework
+    def grpcVer = "1.47.0"
+    implementation("io.grpc:grpc-okhttp:$grpcVer")
+    implementation("io.grpc:grpc-protobuf-lite:$grpcVer")
+    implementation("io.grpc:grpc-stub:$grpcVer")
+    compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
+}
