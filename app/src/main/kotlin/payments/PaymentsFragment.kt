@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import app.App
@@ -43,12 +44,21 @@ class PaymentsFragment : Fragment() {
         app.torConnectionStatus.onEach { status ->
             when (status) {
                 TorService.STATUS_STARTING -> {
-                    binding.progressIndicator.visibility = View.VISIBLE
+                    binding.progressIndicator.isVisible = true
+                    binding.progressMessage.isVisible = true
                     binding.progressMessage.setText(R.string.connecting_to_tor_network)
+                    binding.satsInChannels.isVisible = false
+                    binding.send.isVisible = false
+                    binding.receive.isVisible = false
                 }
 
                 TorService.STATUS_ON -> {
+                    binding.progressIndicator.isVisible = true
+                    binding.progressMessage.isVisible = true
                     binding.progressMessage.setText(R.string.loading_data)
+                    binding.satsInChannels.isVisible = false
+                    binding.send.isVisible = false
+                    binding.receive.isVisible = false
 
                     lifecycleScope.launch {
                         withContext(Dispatchers.Default) {
@@ -77,12 +87,16 @@ class PaymentsFragment : Fragment() {
                             val totalFundsMsat = listFundsResponse.channelsList.sumOf { it.ourAmountMsat.msat }
 
                             withContext(Dispatchers.Main) {
-                                binding.progressIndicator.visibility = View.GONE
-                                binding.progressMessage.visibility = View.GONE
+                                binding.progressIndicator.isVisible = false
+                                binding.progressMessage.isVisible = false
+                                binding.progressMessage.setText(R.string.loading_data)
+                                binding.satsInChannels.isVisible = true
                                 binding.satsInChannels.text = getString(
                                     R.string.s_sats,
                                     NumberFormat.getNumberInstance().format(totalFundsMsat / 1000)
                                 )
+                                binding.send.isVisible = true
+                                binding.receive.isVisible = true
                             }
                         }
                     }

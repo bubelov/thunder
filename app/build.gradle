@@ -54,6 +54,9 @@ protobuf {
 }
 
 dependencies {
+    // KTX extensions provide concise, idiomatic Kotlin to Jetpack, Android platform, and other APIs
+    implementation("androidx.core:core-ktx:1.8.0")
+
     // Tor service
     implementation("info.guardianproject:tor-android:0.4.7.7")
 
