@@ -1,0 +1,12 @@
+insert:
+INSERT
+INTO Conf (serverUrl, serverCertificate, clientCertificate, clientPrivateKey)
+VALUES ?;
+
+selectAll:
+SELECT *
+FROM Conf;
+
+deleteAll:
+DELETE
+FROM Conf;

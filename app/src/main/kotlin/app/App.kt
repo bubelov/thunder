@@ -8,8 +8,16 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.os.IBinder
+import db.database
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.logger.Level
+import org.koin.dsl.module
+import org.koin.ksp.generated.defaultModule
+import org.torproject.jni.BuildConfig
 import org.torproject.jni.TorService
 
 class App : Application() {
@@ -26,6 +34,13 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        startKoin {
+            if (BuildConfig.DEBUG) androidLogger(Level.DEBUG)
+            androidContext(applicationContext)
+            defaultModule()
+            modules(module { single { database(applicationContext) } })
+        }
 
         registerReceiver(
             torBroadcastReceiver,

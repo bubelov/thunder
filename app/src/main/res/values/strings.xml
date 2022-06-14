@@ -6,4 +6,18 @@
     <string name="payments">Payments</string>
     <string name="channels">Channels</string>
     <string name="logs">Logs</string>
+    <string name="connect_to_your_node">Connect to your node</string>
+    <string name="scan_server_host_hint"><![CDATA[In order to connect to your node, Thunder needs to know its .onion address.\n\nHere is how you can generate a QR code containing your node\'s address on RaspiBlitz:\n\nqrencode -t utf8 < /mnt/hdd/tor/clnGRPCport/hostname]]></string>
+    <string name="scan_server_hostname">Scan server hostname</string>
+    <string name="server_port">Server port</string>
+    <string name="blitz_grpc_port">4772</string>
+    <string name="scan_server_cert_hint"><![CDATA[You also need to scan a TLS certificate of your node.\n\nRaspiBlitz example:\n\nqrencode -t utf8 < /home/bitcoin/.lightning/bitcoin/server.pem]]></string>
+    <string name="scan_server_cert">Scan server certificate</string>
+    <string name="scan_client_cert_hint"><![CDATA[Your node won\'t accept connections from clients if they don\'t have a special client certificate.\n\nRaspiBlitz example:\n\nqrencode -t utf8 < /home/bitcoin/.lightning/bitcoin/client.pem]]></string>
+    <string name="scan_client_cert">Scan client certificate</string>
+    <string name="scan_client_key_hint"><![CDATA[You should also add a private key for your client certificate.\n\nRaspiBlitz example:\n\nqrencode -t utf8 < /home/bitcoin/.lightning/bitcoin/client-key.pem]]></string>
+    <string name="scan_client_key">Scan client key</string>
+    <string name="connect">Connect</string>
+    <string name="send">Send</string>
+    <string name="receive">Receive</string>
 </resources>

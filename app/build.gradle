@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.protobuf' version '0.8.18'
+    id 'com.squareup.sqldelight'
+    id 'com.google.devtools.ksp' version '1.6.21-1.0.5'
 }
 
 android {
@@ -28,6 +30,10 @@ android {
     buildFeatures {
         viewBinding = true
     }
+
+    sourceSets.all {
+        kotlin.srcDir("build/generated/ksp/$name/kotlin")
+    }
 }
 
 protobuf {
@@ -50,6 +56,14 @@ protobuf {
                 grpc { option "lite" }
             }
         }
+    }
+}
+
+sqldelight {
+    Database {
+        sourceFolders = ["sqldelight"]
+        packageName = "db"
+        deriveSchemaFromMigrations = true
     }
 }
 
@@ -88,4 +102,19 @@ dependencies {
 
     // List widget
     implementation("androidx.recyclerview:recyclerview:1.2.1")
+
+    // SQLDelight generates typesafe kotlin APIs from SQL statements
+    def sqlDelightVer = "1.5.3"
+    implementation("com.squareup.sqldelight:coroutines-extensions:$sqlDelightVer")
+    implementation("com.squareup.sqldelight:android-driver:$sqlDelightVer")
+    testImplementation("com.squareup.sqldelight:sqlite-driver:$sqlDelightVer")
+
+    // Dependency injection library
+    def koinAnnotationsVer = "1.0.0"
+    implementation("io.insert-koin:koin-android:3.2.0")
+    implementation("io.insert-koin:koin-annotations:$koinAnnotationsVer")
+    ksp("io.insert-koin:koin-ksp-compiler:$koinAnnotationsVer")
+
+    // QR scanner and generator
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 }

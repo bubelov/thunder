@@ -12,13 +12,16 @@ import cln.NodeGrpc
 import cln.NodeOuterClass
 import com.bubelov.thunder.R
 import com.bubelov.thunder.databinding.FragmentPaymentsBinding
+import conf.ConfRepo
 import io.grpc.HttpConnectProxiedSocketAddress
 import io.grpc.okhttp.OkHttpChannelBuilder
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.get
 import org.torproject.jni.TorService
 import tls.lightningNodeSSLContext
 import java.net.InetSocketAddress
@@ -62,14 +65,16 @@ class PaymentsFragment : Fragment() {
 
                     lifecycleScope.launch {
                         withContext(Dispatchers.Default) {
+                            val conf = get<ConfRepo>().load().first()
+
                             val sslContext = lightningNodeSSLContext(
-                                serverCertificate = getString(R.string.server_certificate),
-                                clientCertificate = getString(R.string.client_certificate),
-                                clientPrivateKey = getString(R.string.client_private_key),
+                                serverCertificate = conf.serverCertificate,
+                                clientCertificate = conf.clientCertificate,
+                                clientPrivateKey = conf.clientPrivateKey,
                             )
 
                             val channel = OkHttpChannelBuilder
-                                .forTarget(getString(R.string.server_url))
+                                .forTarget(conf.serverUrl)
                                 .hostnameVerifier { _, _ -> true }
                                 .sslSocketFactory(sslContext.socketFactory)
                                 .proxyDetector {

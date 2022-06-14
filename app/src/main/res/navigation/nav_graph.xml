@@ -7,6 +7,20 @@
     app:startDestination="@id/paymentsFragment">
 
     <fragment
+        android:id="@+id/authFragment"
+        android:name="auth.AuthFragment"
+        android:label="AuthFragment"
+        tools:layout="@layout/fragment_auth">
+
+        <action
+            android:id="@+id/authFragment_toPaymentsFragment"
+            app:destination="@id/paymentsFragment"
+            app:popUpTo="@id/authFragment"
+            app:popUpToInclusive="true" />
+
+    </fragment>
+
+    <fragment
         android:id="@+id/paymentsFragment"
         android:name="payments.PaymentsFragment"
         android:label="PaymentFragment"
