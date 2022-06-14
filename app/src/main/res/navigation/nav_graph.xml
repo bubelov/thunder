@@ -18,4 +18,10 @@
         android:label="ChannelsFragment"
         tools:layout="@layout/fragment_channels" />
 
+    <fragment
+        android:id="@+id/nodeFragment"
+        android:name="node.NodeFragment"
+        android:label="NodeFragment"
+        tools:layout="@layout/fragment_node" />
+
 </navigation>

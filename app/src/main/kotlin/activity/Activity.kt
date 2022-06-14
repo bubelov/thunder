@@ -30,6 +30,10 @@ class Activity : AppCompatActivity() {
                 R.id.channelsFragment -> {
                     navController.navigate(R.id.channelsFragment)
                 }
+
+                R.id.nodeFragment -> {
+                    navController.navigate(R.id.nodeFragment)
+                }
             }
 
             true
