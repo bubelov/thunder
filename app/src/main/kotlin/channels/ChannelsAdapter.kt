@@ -32,7 +32,7 @@ class ChannelsAdapter : ListAdapter<ListFundsChannel, ChannelsAdapter.ViewHolder
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: ListFundsChannel) = binding.apply {
-            binding.channelId.text = "id" + " (${item.ourAmountMsat / 1000}/${item.amountMsat / 1000})"
+            binding.channelId.text = item.shortChannelId + " (${item.ourAmountMsat / 1000}/${item.amountMsat / 1000})"
             val percent = (item.ourAmountMsat.toDouble() / item.amountMsat.toDouble() * 100).toInt()
             binding.progress.progress = percent
         }

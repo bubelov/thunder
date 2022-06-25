@@ -61,8 +61,14 @@ class ChannelsModel(
                         res.channelsList.forEach {
                             db.listFundsChannelQueries.insert(
                                 ListFundsChannel(
+                                    peerId = it.peerId.toStringUtf8(),
                                     ourAmountMsat = it.ourAmountMsat.msat,
                                     amountMsat = it.amountMsat.msat,
+                                    fundingTxid = it.fundingTxid.toStringUtf8(),
+                                    fundingOutput = it.fundingOutput.toLong(),
+                                    connected = it.connected,
+                                    state = it.state.name,
+                                    shortChannelId = it.shortChannelId,
                                 )
                             )
                         }
