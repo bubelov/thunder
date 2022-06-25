@@ -1,4 +1,4 @@
-package payments
+package channels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -22,7 +22,7 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 @KoinViewModel
-class PaymentsModel(
+class ChannelsModel(
     app: Application,
     private val db: Db,
 ) : AndroidViewModel(app) {
@@ -40,7 +40,7 @@ class PaymentsModel(
                 _state.update { State.LoadingData }
                 val channels =
                     withContext(Dispatchers.Default) { db.listFundsChannelQueries.selectAll().executeAsList() }
-                _state.update { State.DisplayingData(channels.sumOf { it.ourAmountMsat } / 1000) }
+                _state.update { State.DisplayingData(channels) }
             } else {
                 if (node != null) {
                     _state.update { State.LoadingData }
@@ -77,6 +77,6 @@ class PaymentsModel(
     sealed class State {
         data class ConnectingToTor(val status: String) : State()
         object LoadingData : State()
-        data class DisplayingData(val totalSats: Long) : State()
+        data class DisplayingData(val channels: List<ListFundsChannel>) : State()
     }
 }

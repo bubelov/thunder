@@ -5,10 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import cln.NodeOuterClass.ListfundsChannels
 import com.bubelov.thunder.databinding.ItemChannelBinding
+import db.ListFundsChannel
 
-class ChannelsAdapter : ListAdapter<ListfundsChannels, ChannelsAdapter.ViewHolder>(DiffCallback()) {
+class ChannelsAdapter : ListAdapter<ListFundsChannel, ChannelsAdapter.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -31,25 +31,25 @@ class ChannelsAdapter : ListAdapter<ListfundsChannels, ChannelsAdapter.ViewHolde
         private val binding: ItemChannelBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: ListfundsChannels) = binding.apply {
-            binding.channelId.text = item.shortChannelId + " (${item.ourAmountMsat.msat / 1000}/${item.amountMsat.msat / 1000})"
-            val percent = (item.ourAmountMsat.msat.toDouble() / item.amountMsat.msat.toDouble() * 100).toInt()
+        fun bind(item: ListFundsChannel) = binding.apply {
+            binding.channelId.text = "id" + " (${item.ourAmountMsat / 1000}/${item.amountMsat / 1000})"
+            val percent = (item.ourAmountMsat.toDouble() / item.amountMsat.toDouble() * 100).toInt()
             binding.progress.progress = percent
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<ListfundsChannels>() {
+    class DiffCallback : DiffUtil.ItemCallback<ListFundsChannel>() {
 
         override fun areItemsTheSame(
-            oldItem: ListfundsChannels,
-            newItem: ListfundsChannels,
+            oldItem: ListFundsChannel,
+            newItem: ListFundsChannel,
         ): Boolean {
             return false
         }
 
         override fun areContentsTheSame(
-            oldItem: ListfundsChannels,
-            newItem: ListfundsChannels,
+            oldItem: ListFundsChannel,
+            newItem: ListFundsChannel,
         ): Boolean {
             return false
         }
