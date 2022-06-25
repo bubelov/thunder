@@ -9,6 +9,7 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import db.Db
 import db.ListFundsChannel
+import db.ListFundsOutput
 import db.ListFundsResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,6 +58,22 @@ class ChannelsModel(
                                 ZonedDateTime.now(ZoneOffset.UTC).toString()
                             )
                         )
+
+                        res.outputsList.forEach {
+                            db.listFundsOutputQueries.insert(
+                                ListFundsOutput(
+                                    txid = it.txid.toStringUtf8(),
+                                    output = it.output.toLong(),
+                                    amountMsat = it.amountMsat.msat,
+                                    scriptPubKey = it.scriptpubkey.toStringUtf8(),
+                                    status = it.status.name,
+                                    reserved = it.reserved,
+                                    address = it.address,
+                                    redeemScript = it.redeemscript.toStringUtf8(),
+                                    blockHeight = it.blockheight.toLong(),
+                                )
+                            )
+                        }
 
                         res.channelsList.forEach {
                             db.listFundsChannelQueries.insert(
