@@ -1,6 +1,0 @@
-CREATE TABLE Conf (
-    serverUrl TEXT NOT NULL,
-    serverCertificate TEXT NOT NULL,
-    clientCertificate TEXT NOT NULL,
-    clientPrivateKey TEXT NOT NULL
-);

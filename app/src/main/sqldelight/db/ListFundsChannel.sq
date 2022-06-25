@@ -1,0 +1,9 @@
+CREATE TABLE ListFundsChannel (
+    ourAmountMsat INTEGER NOT NULL
+);
+
+insert:
+INSERT INTO ListFundsChannel VALUES ?;
+
+selectAll:
+SELECT * FROM ListFundsChannel;

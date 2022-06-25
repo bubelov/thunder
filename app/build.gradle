@@ -60,10 +60,10 @@ protobuf {
 }
 
 sqldelight {
-    Database {
+    Db {
         sourceFolders = ["sqldelight"]
         packageName = "db"
-        deriveSchemaFromMigrations = true
+        schemaOutputDirectory = file("src/main/sqldelight/db/schemas")
     }
 }
 

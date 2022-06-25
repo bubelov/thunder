@@ -1,6 +1,13 @@
+CREATE TABLE Conf (
+    serverUrl TEXT NOT NULL,
+    serverCertificate TEXT NOT NULL,
+    clientCertificate TEXT NOT NULL,
+    clientPrivateKey TEXT NOT NULL
+);
+
 insert:
 INSERT
-INTO Conf (serverUrl, serverCertificate, clientCertificate, clientPrivateKey)
+INTO Conf
 VALUES ?;
 
 selectAll:

@@ -1,0 +1,12 @@
+CREATE TABLE ListFundsResponse (
+    date TEXT NOT NULL
+);
+
+insert:
+INSERT INTO ListFundsResponse VALUES ?;
+
+select:
+SELECT * FROM ListFundsResponse;
+
+deleteAll:
+DELETE FROM ListFundsResponse;

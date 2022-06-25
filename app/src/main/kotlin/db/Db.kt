@@ -4,9 +4,9 @@ import android.content.Context
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 
-fun database(context: Context): Database {
+fun database(context: Context): Db {
     val driver = AndroidSqliteDriver(
-        schema = Database.Schema,
+        schema = Db.Schema,
         context = context,
         name = "thunder-v1.db",
     )
@@ -14,6 +14,6 @@ fun database(context: Context): Database {
     return database(driver)
 }
 
-fun database(driver: SqlDriver): Database {
-    return Database(driver)
+fun database(driver: SqlDriver): Db {
+    return Db(driver)
 }
