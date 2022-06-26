@@ -20,4 +20,6 @@
     <string name="connect">Connect</string>
     <string name="send">Send</string>
     <string name="receive">Receive</string>
+    <string name="login_with_raspiblitz">Login with RaspiBlitz</string>
+    <string name="or">or</string>
 </resources>

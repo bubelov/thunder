@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import org.koin.android.ext.android.get
 
 class AuthFragment : Fragment() {
@@ -25,6 +26,29 @@ class AuthFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val confRepo by lazy { get<ConfRepo>() }
+
+    private val blitzScanner = registerForActivityResult(
+        ScanContract()
+    ) { result: ScanIntentResult ->
+        if (result.contents != null) {
+            val json = JSONObject(result.contents)
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                val confRepo = get<ConfRepo>()
+
+                confRepo.save {
+                    it.copy(
+                        serverUrl = json.getString("url"),
+                        serverCertificate = json.getString("server_pem"),
+                        clientCertificate = json.getString("client_pem"),
+                        clientPrivateKey = json.getString("client_key_pem"),
+                    )
+                }
+
+                findNavController().navigate(R.id.authFragment_toPaymentsFragment)
+            }
+        }
+    }
 
     private val serverHostnameScanner = registerForActivityResult(
         ScanContract()
@@ -84,6 +108,10 @@ class AuthFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.scanBlitzCredentials.setOnClickListener {
+            blitzScanner.launch(ScanOptions())
+        }
+
         binding.scanServerHostname.setOnClickListener {
             serverHostnameScanner.launch(ScanOptions())
         }
