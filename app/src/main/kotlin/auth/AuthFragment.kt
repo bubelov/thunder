@@ -16,6 +16,7 @@ import conf.ConfRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import org.koin.android.ext.android.get
@@ -102,9 +103,21 @@ class AuthFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentAuthBinding.inflate(inflater, container, false)
-        return binding.root
+    ): View? {
+        val conf = runBlocking { get<ConfRepo>().load().first() }
+
+        return if (
+            conf.serverUrl.isBlank()
+            || conf.serverCertificate.isBlank()
+            || conf.clientCertificate.isBlank()
+            || conf.clientPrivateKey.isBlank()
+        ) {
+            _binding = FragmentAuthBinding.inflate(inflater, container, false)
+            binding.root
+        } else {
+            findNavController().navigate(R.id.authFragment_toPaymentsFragment)
+            null
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
