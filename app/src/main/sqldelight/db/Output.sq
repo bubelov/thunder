@@ -1,4 +1,4 @@
-CREATE TABLE ListFundsOutput (
+CREATE TABLE Output (
     txid TEXT NOT NULL,
     output INTEGER NOT NULL DEFAULT 0,
     amountMsat INTEGER NOT NULL DEFAULT 0,
@@ -11,10 +11,10 @@ CREATE TABLE ListFundsOutput (
 );
 
 insert:
-INSERT INTO ListFundsOutput VALUES ?;
+INSERT INTO Output VALUES ?;
 
 selectAll:
-SELECT * FROM ListFundsOutput;
+SELECT * FROM Output;
 
 deleteAll:
-DELETE FROM ListFundsOutput;
+DELETE FROM Output;

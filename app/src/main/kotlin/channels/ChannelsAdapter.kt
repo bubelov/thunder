@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bubelov.thunder.databinding.ItemChannelBinding
-import db.ListFundsChannel
+import db.Channel
 
-class ChannelsAdapter : ListAdapter<ListFundsChannel, ChannelsAdapter.ViewHolder>(DiffCallback()) {
+class ChannelsAdapter : ListAdapter<Channel, ChannelsAdapter.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -31,25 +31,25 @@ class ChannelsAdapter : ListAdapter<ListFundsChannel, ChannelsAdapter.ViewHolder
         private val binding: ItemChannelBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: ListFundsChannel) = binding.apply {
+        fun bind(item: Channel) = binding.apply {
             binding.channelId.text = item.shortChannelId + " (${item.ourAmountMsat / 1000}/${item.amountMsat / 1000})"
             val percent = (item.ourAmountMsat.toDouble() / item.amountMsat.toDouble() * 100).toInt()
             binding.progress.progress = percent
         }
     }
 
-    class DiffCallback : DiffUtil.ItemCallback<ListFundsChannel>() {
+    class DiffCallback : DiffUtil.ItemCallback<Channel>() {
 
         override fun areItemsTheSame(
-            oldItem: ListFundsChannel,
-            newItem: ListFundsChannel,
+            oldItem: Channel,
+            newItem: Channel,
         ): Boolean {
             return false
         }
 
         override fun areContentsTheSame(
-            oldItem: ListFundsChannel,
-            newItem: ListFundsChannel,
+            oldItem: Channel,
+            newItem: Channel,
         ): Boolean {
             return false
         }

@@ -1,4 +1,4 @@
-CREATE TABLE ListFundsChannel (
+CREATE TABLE Channel (
     peerId TEXT NOT NULL DEFAULT '',
     ourAmountMsat INTEGER NOT NULL,
     amountMsat INTEGER NOT NULL,
@@ -10,10 +10,10 @@ CREATE TABLE ListFundsChannel (
 );
 
 insert:
-INSERT INTO ListFundsChannel VALUES ?;
+INSERT INTO Channel VALUES ?;
 
 selectAll:
-SELECT * FROM ListFundsChannel;
+SELECT * FROM Channel;
 
 deleteAll:
-DELETE FROM ListFundsChannel;
+DELETE FROM Channel;

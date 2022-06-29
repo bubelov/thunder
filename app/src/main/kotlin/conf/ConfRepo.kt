@@ -20,6 +20,7 @@ class ConfRepo(
             serverCertificate = "",
             clientCertificate = "",
             clientPrivateKey = "",
+            lastSyncDate = "",
         )
     }
 

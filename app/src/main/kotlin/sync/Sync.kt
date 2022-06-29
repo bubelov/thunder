@@ -1,11 +1,12 @@
 package sync
 
+import android.util.Log
 import api.ApiController
 import cln.NodeOuterClass
+import conf.ConfRepo
+import db.Channel
 import db.Db
-import db.ListFundsChannel
-import db.ListFundsOutput
-import db.ListFundsResponse
+import db.Output
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +20,7 @@ import java.time.ZonedDateTime
 @Single
 class Sync(
     private val apiController: ApiController,
+    private val confRepo: ConfRepo,
     private val db: Db,
 ) {
 
@@ -43,19 +45,11 @@ class Sync(
                 }
 
                 db.transaction {
-                    db.listFundsResponseQueries.deleteAll()
-
-                    db.listFundsResponseQueries.insert(
-                        ListFundsResponse(
-                            ZonedDateTime.now(ZoneOffset.UTC).toString()
-                        )
-                    )
-
-                    db.listFundsOutputQueries.deleteAll()
+                    db.outputQueries.deleteAll()
 
                     funds.outputsList.forEach {
-                        db.listFundsOutputQueries.insert(
-                            ListFundsOutput(
+                        db.outputQueries.insert(
+                            Output(
                                 txid = it.txid.toStringUtf8(),
                                 output = it.output.toLong(),
                                 amountMsat = it.amountMsat.msat,
@@ -69,11 +63,11 @@ class Sync(
                         )
                     }
 
-                    db.listFundsChannelQueries.deleteAll()
+                    db.channelQueries.deleteAll()
 
                     funds.channelsList.forEach {
-                        db.listFundsChannelQueries.insert(
-                            ListFundsChannel(
+                        db.channelQueries.insert(
+                            Channel(
                                 peerId = it.peerId.toStringUtf8(),
                                 ourAmountMsat = it.ourAmountMsat.msat,
                                 amountMsat = it.amountMsat.msat,
@@ -86,8 +80,11 @@ class Sync(
                         )
                     }
                 }
-            }
 
+                confRepo.save { it.copy(lastSyncDate = ZonedDateTime.now(ZoneOffset.UTC).toString()) }
+            }.onFailure {
+                Log.e("sync", "Failed to sync", it)
+            }
         }
 
         _state.update { State.Inactive }

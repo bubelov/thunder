@@ -7,14 +7,16 @@ import api.ApiController
 import cln.NodeOuterClass
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
-import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
+import conf.ConfRepo
 import db.Db
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.withContext
 import org.koin.android.annotation.KoinViewModel
@@ -23,6 +25,7 @@ import sync.Sync
 @KoinViewModel
 class PaymentsModel(
     private val apiController: ApiController,
+    confRepo: ConfRepo,
     private val db: Db,
     sync: Sync,
 ) : ViewModel() {
@@ -33,12 +36,12 @@ class PaymentsModel(
     init {
         combine(
             sync.state,
-            db.listFundsResponseQueries.select().asFlow().mapToOneOrNull(),
-        ) { _, listFundsResponse ->
+            confRepo.load().map { it.lastSyncDate }.distinctUntilChanged(),
+        ) { _, lastSyncDate ->
             _state.update { State.LoadingData }
 
-            if (listFundsResponse != null) {
-                val channels = db.listFundsChannelQueries.selectAll().asFlow().mapToList().first()
+            if (lastSyncDate.isNotBlank()) {
+                val channels = db.channelQueries.selectAll().asFlow().mapToList().first()
                 _state.update { State.DisplayingData(channels.sumOf { it.ourAmountMsat } / 1000) }
             }
         }.launchIn(viewModelScope)
