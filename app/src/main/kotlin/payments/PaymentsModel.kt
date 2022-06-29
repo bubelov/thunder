@@ -1,6 +1,7 @@
 package payments
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import app.App
@@ -95,6 +96,20 @@ class PaymentsModel(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    suspend fun pay(invoice: String) {
+        Log.d("payments", "Paying invoice $invoice")
+
+        val response = withContext(Dispatchers.Default) {
+            getApplication<App>().node.value!!.pay(
+                NodeOuterClass.PayRequest.newBuilder()
+                    .setBolt11(invoice)
+                    .build()
+            )
+        }
+
+        Log.d("payments", "Response status ${response.status}")
     }
 
     sealed class State {
