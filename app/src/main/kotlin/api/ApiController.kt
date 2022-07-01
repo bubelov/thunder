@@ -3,16 +3,18 @@ package api
 import android.util.Log
 import cln.NodeGrpc
 import conf.ConfRepo
+import db.AuthCredentials
 import db.authCredentials
 import io.grpc.HttpConnectProxiedSocketAddress
 import io.grpc.okhttp.OkHttpChannelBuilder
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import org.koin.core.annotation.Single
 import org.torproject.jni.TorService
@@ -31,47 +33,51 @@ class ApiController(
     init {
         Log.d("api", "Init")
 
-        combine(
-            torController.connectionStatus,
-            confRepo.load().map { it.authCredentials() }.distinctUntilChanged(),
-        ) { torStatus, creds ->
-            Log.d("api", "Tor status changed to $torStatus")
+        confRepo.load().map { it.authCredentials() }.distinctUntilChanged().onEach { creds ->
+            if (creds.filled()) {
+                val sslContext = lightningNodeSSLContext(
+                    serverCertificate = creds.serverCertificate,
+                    clientCertificate = creds.clientCertificate,
+                    clientPrivateKey = creds.clientPrivateKey,
+                )
 
-            when (torStatus) {
-                TorService.STATUS_ON -> {
-                    if (
-                        creds.serverUrl.isBlank()
-                        || creds.serverCertificate.isBlank()
-                        || creds.clientCertificate.isBlank()
-                        || creds.clientPrivateKey.isBlank()
-                    ) {
-                        _api.update { null }
-                    } else {
-                        val sslContext = lightningNodeSSLContext(
-                            serverCertificate = creds.serverCertificate,
-                            clientCertificate = creds.clientCertificate,
-                            clientPrivateKey = creds.clientPrivateKey,
-                        )
+                val channelBuilder = OkHttpChannelBuilder
+                    .forTarget(creds.serverUrl)
+                    .hostnameVerifier { _, _ -> true }
+                    .sslSocketFactory(sslContext.socketFactory)
 
-                        val channel = OkHttpChannelBuilder
-                            .forTarget(creds.serverUrl)
-                            .hostnameVerifier { _, _ -> true }
-                            .sslSocketFactory(sslContext.socketFactory)
-                            .proxyDetector {
-                                HttpConnectProxiedSocketAddress
-                                    .newBuilder()
-                                    .setProxyAddress(InetSocketAddress("localhost", 8118))
-                                    .setTargetAddress(it as InetSocketAddress)
+                if (creds.serverUrl.contains("onion") && !creds.serverUrl.startsWith("http")) {
+                    torController.connectionStatus.collectLatest { torStatus ->
+                        when (torStatus) {
+                            TorService.STATUS_ON -> {
+                                val channel = channelBuilder
+                                    .proxyDetector {
+                                        HttpConnectProxiedSocketAddress
+                                            .newBuilder()
+                                            .setProxyAddress(InetSocketAddress("localhost", 8118))
+                                            .setTargetAddress(it as InetSocketAddress)
+                                            .build()
+                                    }
                                     .build()
+
+                                _api.update { NodeGrpc.newBlockingStub(channel) }
                             }
-                            .build()
 
-                        _api.update { NodeGrpc.newBlockingStub(channel) }
+                            else -> _api.update { null }
+                        }
                     }
+                } else {
+                    val channel = channelBuilder.build()
+                    _api.update { NodeGrpc.newBlockingStub(channel) }
                 }
-
-                else -> _api.update { null }
             }
         }.launchIn(GlobalScope)
+    }
+
+    private fun AuthCredentials.filled(): Boolean {
+        return serverUrl.isNotBlank()
+                || serverCertificate.isNotBlank()
+                || clientCertificate.isNotBlank()
+                || clientPrivateKey.isNotBlank()
     }
 }
