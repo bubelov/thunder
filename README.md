@@ -1,5 +1,12 @@
 ## Thunder - Core Lightning node manager for Android
 
+### How to instll Thunder
+
+You can always grab the latest preview release here:
+
+https://github.com/bubelov/thunder/releases/tag/preview
+
+The app will be available on F-Droid eventually, but there is no ETA on that.
 
 ### How to Authorize with RaspiBlitz
 
