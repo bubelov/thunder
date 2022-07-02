@@ -1,8 +1,9 @@
 CREATE TABLE Conf (
     serverUrl TEXT NOT NULL,
-    serverCertificate TEXT NOT NULL,
-    clientCertificate TEXT NOT NULL,
-    clientPrivateKey TEXT NOT NULL,
+    serverCertPem TEXT NOT NULL,
+    clientCertPem TEXT NOT NULL,
+    clientKeyPem TEXT NOT NULL,
+    authCompleted INTEGER AS Boolean NOT NULL,
     lastSyncDate TEXT NOT NULL
 );
 

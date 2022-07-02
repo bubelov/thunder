@@ -17,7 +17,7 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/connect"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
         <LinearLayout
@@ -25,103 +25,90 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:padding="16dp">
-
-            <Button
-                android:id="@+id/scanBlitzCredentials"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/login_with_raspiblitz" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:gravity="center_horizontal"
-                android:text="@string/or"
-                android:textAppearance="?attr/textAppearanceHeadline4" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/scan_server_host_hint"
-                android:textAppearance="?attr/textAppearanceBody1" />
-
-            <Button
-                android:id="@+id/scanServerHostname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/scan_server_hostname" />
+            android:paddingHorizontal="16dp">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/usernameLayout"
+                android:id="@+id/serverUrlLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:hint="@string/server_port"
-                app:errorEnabled="true">
+                android:hint="@string/server_url"
+                app:endIconDrawable="@drawable/baseline_qr_code_scanner_24"
+                app:endIconMode="custom">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/serverPort"
+                    android:id="@+id/serverUrl"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/blitz_grpc_port" />
+                    android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/serverCertLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/scan_server_cert_hint"
-                android:textAppearance="?attr/textAppearanceBody1" />
+                android:layout_marginTop="8dp"
+                android:hint="Server certificate"
+                app:endIconDrawable="@drawable/baseline_qr_code_scanner_24"
+                app:endIconMode="custom">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/serverCert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/clientCertLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Client certificate"
+                app:endIconDrawable="@drawable/baseline_qr_code_scanner_24"
+                app:endIconMode="custom">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/clientCert"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/clientKeyLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Client key"
+                app:endIconDrawable="@drawable/baseline_qr_code_scanner_24"
+                app:endIconMode="custom">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/clientKey"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/scanServerCertificate"
+                android:id="@+id/scanBlitzQr"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/scan_server_cert" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/scan_client_cert_hint"
-                android:textAppearance="?attr/textAppearanceBody1" />
+                android:text="@string/scan_blitz_qr" />
 
             <Button
-                android:id="@+id/scanClientCertificate"
+                android:id="@+id/connect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/scan_client_cert" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/scan_client_key_hint"
-                android:textAppearance="?attr/textAppearanceBody1" />
-
-            <Button
-                android:id="@+id/scanClientKey"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/scan_client_key" />
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/connect"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
         </LinearLayout>
 
     </ScrollView>
-
-    <Button
-        android:id="@+id/connect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:text="@string/connect"
-        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

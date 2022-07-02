@@ -3,7 +3,6 @@ package api
 import android.util.Log
 import cln.NodeGrpc
 import conf.ConfRepo
-import db.AuthCredentials
 import db.authCredentials
 import io.grpc.HttpConnectProxiedSocketAddress
 import io.grpc.okhttp.OkHttpChannelBuilder
@@ -11,10 +10,9 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import org.koin.core.annotation.Single
 import org.torproject.jni.TorService
@@ -27,18 +25,22 @@ class ApiController(
     confRepo: ConfRepo,
     torController: TorController,
 ) {
+
     private val _api = MutableStateFlow<NodeGrpc.NodeBlockingStub?>(null)
     val api = _api.asStateFlow()
 
     init {
         Log.d("api", "Init")
 
-        confRepo.load().map { it.authCredentials() }.distinctUntilChanged().onEach { creds ->
-            if (creds.filled()) {
+        combine(
+            confRepo.load().map { it.authCompleted },
+            confRepo.load().map { it.authCredentials() },
+        ) { authCompleted, creds ->
+            if (authCompleted) {
                 val sslContext = lightningNodeSSLContext(
-                    serverCertificate = creds.serverCertificate,
-                    clientCertificate = creds.clientCertificate,
-                    clientPrivateKey = creds.clientPrivateKey,
+                    serverCertPem = creds.serverCertPem,
+                    clientCertPem = creds.clientCertPem,
+                    clientKeyPem = creds.clientKeyPem,
                 )
 
                 val channelBuilder = OkHttpChannelBuilder
@@ -70,14 +72,9 @@ class ApiController(
                     val channel = channelBuilder.build()
                     _api.update { NodeGrpc.newBlockingStub(channel) }
                 }
+            } else {
+                _api.update { null }
             }
         }.launchIn(GlobalScope)
-    }
-
-    private fun AuthCredentials.filled(): Boolean {
-        return serverUrl.isNotBlank()
-                || serverCertificate.isNotBlank()
-                || clientCertificate.isNotBlank()
-                || clientPrivateKey.isNotBlank()
     }
 }

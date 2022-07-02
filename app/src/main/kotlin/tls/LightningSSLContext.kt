@@ -13,22 +13,22 @@ import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
 fun lightningNodeSSLContext(
-    serverCertificate: String,
-    clientCertificate: String,
-    clientPrivateKey: String,
+    serverCertPem: String,
+    clientCertPem: String,
+    clientKeyPem: String,
 ): SSLContext {
     val serverKeyStore = KeyStore.getInstance(KeyStore.getDefaultType())
     serverKeyStore.load(null, null)
-    serverKeyStore.setCertificateEntry("server-cert", serverCertificate.toX509Certificate())
+    serverKeyStore.setCertificateEntry("server-cert", serverCertPem.toX509Certificate())
 
     val clientKeyStore = KeyStore.getInstance(KeyStore.getDefaultType())
     clientKeyStore.load(null, null)
 
     clientKeyStore.setKeyEntry(
         "client-key",
-        clientPrivateKey.toECPrivateKey(),
+        clientKeyPem.toECPrivateKey(),
         "".toCharArray(),
-        arrayOf(clientCertificate.toX509Certificate()),
+        arrayOf(clientCertPem.toX509Certificate()),
     )
 
     val kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm())

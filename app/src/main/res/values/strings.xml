@@ -8,9 +8,8 @@
     <string name="logs">Logs</string>
     <string name="connect_to_your_node">Connect to your node</string>
     <string name="scan_server_host_hint"><![CDATA[In order to connect to your node, Thunder needs to know its .onion address.\n\nHere is how you can generate a QR code containing your node\'s address on RaspiBlitz:\n\nsudo qrencode -t utf8 -r /mnt/hdd/tor/clnGRPCport/hostname]]></string>
-    <string name="scan_server_hostname">Scan server hostname</string>
-    <string name="server_port">Server port</string>
-    <string name="blitz_grpc_port">4772</string>
+    <string name="scan_server_url">Scan server URL</string>
+    <string name="server_url">Server URL</string>
     <string name="scan_server_cert_hint"><![CDATA[You also need to scan a TLS certificate of your node.\n\nRaspiBlitz example:\n\nsudo qrencode -t utf8 -r /home/bitcoin/.lightning/bitcoin/server.pem]]></string>
     <string name="scan_server_cert">Scan server certificate</string>
     <string name="scan_client_cert_hint"><![CDATA[Your node won\'t accept connections from clients if they don\'t have a special client certificate.\n\nRaspiBlitz example:\n\nsudo qrencode -t utf8 -r /home/bitcoin/.lightning/bitcoin/client.pem]]></string>
@@ -20,6 +19,6 @@
     <string name="connect">Connect</string>
     <string name="send">Send</string>
     <string name="receive">Receive</string>
-    <string name="login_with_raspiblitz">Login with RaspiBlitz</string>
+    <string name="scan_blitz_qr">Scan Blitz QR</string>
     <string name="or">or</string>
 </resources>

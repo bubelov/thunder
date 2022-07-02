@@ -17,9 +17,10 @@ class ConfRepo(
     companion object {
         val DEFAULT_CONF = Conf(
             serverUrl = "",
-            serverCertificate = "",
-            clientCertificate = "",
-            clientPrivateKey = "",
+            serverCertPem = "",
+            clientCertPem = "",
+            clientKeyPem = "",
+            authCompleted = false,
             lastSyncDate = "",
         )
     }
@@ -32,7 +33,7 @@ class ConfRepo(
         save(applyChanges(db.confQueries.selectAll().executeAsOneOrNull() ?: DEFAULT_CONF))
     }
 
-    suspend fun save(conf: Conf) {
+    private suspend fun save(conf: Conf) {
         withContext(Dispatchers.Default) {
             db.transaction {
                 db.confQueries.deleteAll()
