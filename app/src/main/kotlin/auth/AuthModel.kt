@@ -3,11 +3,14 @@ package auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import api.ApiBuilder
+import cln.NodeOuterClass
 import conf.ConfRepo
 import db.Conf
 import db.authCredentials
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.koin.android.annotation.KoinViewModel
 import tor.TorController
 
@@ -36,9 +39,13 @@ class AuthModel(
     suspend fun saveConf(applyChanges: (Conf) -> Conf) = confRepo.save(applyChanges)
 
     suspend fun testConnection() {
-        ApiBuilder().build(
-            creds = confRepo.load().first().authCredentials(),
-            torController = torController,
-        )
+        withContext(Dispatchers.Default) {
+            val api = ApiBuilder().build(
+                creds = confRepo.load().first().authCredentials(),
+                torController = torController,
+            )
+
+            api.listFunds(NodeOuterClass.ListfundsRequest.getDefaultInstance())
+        }
     }
 }

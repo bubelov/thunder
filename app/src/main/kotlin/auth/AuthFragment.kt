@@ -1,10 +1,12 @@
 package auth
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -119,14 +121,31 @@ class AuthFragment : Fragment() {
                     )
                 }
 
+                val inputWidgets = listOf(
+                    binding.serverUrlLayout,
+                    binding.serverCertLayout,
+                    binding.clientCertLayout,
+                    binding.clientKeyLayout,
+                    binding.scanBlitzQr,
+                    binding.connect,
+                )
+
+                inputWidgets.forEach { it.isVisible = false }
+                binding.progress.isVisible = true
+
                 runCatching {
                     model.testConnection()
                 }.onSuccess {
                     model.saveConf { it.copy(authCompleted = true) }
                     findNavController().navigate(R.id.authFragment_toPaymentsFragment)
                 }.onFailure {
-                    Toast.makeText(requireContext(), "Connection test failed", Toast.LENGTH_SHORT).show()
+                    val message = "Failed to connect to Core Lightning"
+                    Log.e("auth", message, it)
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                 }
+
+                inputWidgets.forEach { it.isVisible = true }
+                binding.progress.isVisible = false
             }
         }
     }

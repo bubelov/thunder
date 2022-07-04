@@ -47,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="Server certificate"
+                android:hint="@string/server_certificate"
                 app:endIconDrawable="@drawable/baseline_qr_code_scanner_24"
                 app:endIconMode="custom">
 
@@ -63,7 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="Client certificate"
+                android:hint="@string/client_certificate"
                 app:endIconDrawable="@drawable/baseline_qr_code_scanner_24"
                 app:endIconMode="custom">
 
@@ -79,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="Client key"
+                android:hint="@string/client_key"
                 app:endIconDrawable="@drawable/baseline_qr_code_scanner_24"
                 app:endIconMode="custom">
 
@@ -110,5 +110,15 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

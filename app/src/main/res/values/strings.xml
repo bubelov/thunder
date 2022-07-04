@@ -21,4 +21,7 @@
     <string name="receive">Receive</string>
     <string name="scan_blitz_qr">Scan Blitz QR</string>
     <string name="or">or</string>
+    <string name="server_certificate">Server certificate</string>
+    <string name="client_certificate">Client certificate</string>
+    <string name="client_key">Client key</string>
 </resources>
