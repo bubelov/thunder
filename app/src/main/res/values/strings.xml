@@ -6,7 +6,7 @@
     <string name="payments">Payments</string>
     <string name="channels">Channels</string>
     <string name="logs">Logs</string>
-    <string name="connect_to_your_node">Connect to your node</string>
+    <string name="connect_to_core_lightning">Connect to Core Lightning</string>
     <string name="scan_server_host_hint"><![CDATA[In order to connect to your node, Thunder needs to know its .onion address.\n\nHere is how you can generate a QR code containing your node\'s address on RaspiBlitz:\n\nsudo qrencode -t utf8 -r /mnt/hdd/tor/clnGRPCport/hostname]]></string>
     <string name="scan_server_url">Scan server URL</string>
     <string name="server_url">Server URL</string>
@@ -21,7 +21,11 @@
     <string name="receive">Receive</string>
     <string name="scan_blitz_qr">Scan Blitz QR</string>
     <string name="or">or</string>
-    <string name="server_certificate">Server certificate</string>
-    <string name="client_certificate">Client certificate</string>
-    <string name="client_key">Client key</string>
+    <string name="server_pem_certificate">Server PEM certificate</string>
+    <string name="client_pem_certificate">Client PEM certificate</string>
+    <string name="client_pem_key">Client PEM key</string>
+    <string name="url_is_missing">URL is missing</string>
+    <string name="certificate_is_missing">Certificate is missing</string>
+    <string name="key_is_missing">Key is missing</string>
+    <string name="failed_to_connect_to_core_lightning">Failed to connect to Core Lightning</string>
 </resources>

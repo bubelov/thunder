@@ -38,21 +38,21 @@ class AuthFragment : Fragment() {
 
     private val serverCertScanner = registerForActivityResult(ScanContract()) { res ->
         res.contents?.trim('\n')?.let {
-            binding.serverCert.setText(it)
+            binding.serverCertPem.setText(it)
             model.saveServerCert(it)
         }
     }
 
     private val clientCertScanner = registerForActivityResult(ScanContract()) { res ->
         res.contents?.trim('\n')?.let {
-            binding.clientCert.setText(it)
+            binding.clientCertPem.setText(it)
             model.saveClientCert(it)
         }
     }
 
     private val clientKeyScanner = registerForActivityResult(ScanContract()) { res ->
         res.contents?.trim('\n')?.let {
-            binding.clientKey.setText(it)
+            binding.clientKeyPem.setText(it)
             model.saveClientKey(it)
         }
     }
@@ -67,9 +67,9 @@ class AuthFragment : Fragment() {
             val clientKey = json.getString("client_key_pem").trim('\n')
 
             binding.serverUrl.setText(serverUrl)
-            binding.serverCert.setText(serverCert)
-            binding.clientCert.setText(clientCert)
-            binding.clientKey.setText(clientKey)
+            binding.serverCertPem.setText(serverCert)
+            binding.clientCertPem.setText(clientCert)
+            binding.clientKeyPem.setText(clientKey)
 
             viewLifecycleOwner.lifecycleScope.launch {
                 model.saveConf {
@@ -95,37 +95,90 @@ class AuthFragment : Fragment() {
         } else {
             _binding = FragmentAuthBinding.inflate(inflater, container, false)
             binding.serverUrl.setText(conf.serverUrl)
-            binding.serverCert.setText(conf.serverCertPem)
-            binding.clientCert.setText(conf.clientCertPem)
-            binding.clientKey.setText(conf.clientKeyPem)
+            binding.serverCertPem.setText(conf.serverCertPem)
+            binding.clientCertPem.setText(conf.clientCertPem)
+            binding.clientKeyPem.setText(conf.clientKeyPem)
             binding.root
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.serverUrlLayout.setEndIconOnClickListener { serverUrlScanner.launch(ScanOptions()) }
-        binding.serverCertLayout.setEndIconOnClickListener { serverCertScanner.launch(ScanOptions()) }
-        binding.clientCertLayout.setEndIconOnClickListener { clientCertScanner.launch(ScanOptions()) }
-        binding.clientKeyLayout.setEndIconOnClickListener { clientKeyScanner.launch(ScanOptions()) }
+
+        binding.serverUrl.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.serverUrlLayout.error = null
+            }
+        }
+
+        binding.serverCertPemLayout.setEndIconOnClickListener { serverCertScanner.launch(ScanOptions()) }
+
+        binding.serverCertPem.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.serverCertPemLayout.error = null
+            }
+        }
+
+        binding.clientCertPemLayout.setEndIconOnClickListener { clientCertScanner.launch(ScanOptions()) }
+
+        binding.clientCertPem.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.clientCertPemLayout.error = null
+            }
+        }
+
+        binding.clientKeyPemLayout.setEndIconOnClickListener { clientKeyScanner.launch(ScanOptions()) }
+
+        binding.clientKeyPem.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                binding.clientKeyPemLayout.error = null
+            }
+        }
 
         binding.scanBlitzQr.setOnClickListener { blitzScanner.launch(ScanOptions()) }
 
         binding.connect.setOnClickListener {
+            var hasValidationErrors = false
+
+            if (binding.serverUrl.length() == 0) {
+                binding.serverUrlLayout.error = getString(R.string.url_is_missing)
+                hasValidationErrors = true
+            }
+
+            if (binding.serverCertPem.length() == 0) {
+                binding.serverCertPemLayout.error = getString(R.string.certificate_is_missing)
+                hasValidationErrors = true
+            }
+
+            if (binding.clientCertPem.length() == 0) {
+                binding.clientCertPemLayout.error = getString(R.string.certificate_is_missing)
+                hasValidationErrors = true
+            }
+
+            if (binding.clientKeyPem.length() == 0) {
+                binding.clientKeyPemLayout.error = getString(R.string.key_is_missing)
+                hasValidationErrors = true
+            }
+
+            if (hasValidationErrors) {
+                return@setOnClickListener
+            }
+
             viewLifecycleOwner.lifecycleScope.launch {
                 model.saveConf {
                     it.copy(
                         serverUrl = binding.serverUrl.text.toString(),
-                        serverCertPem = binding.serverCert.text.toString(),
-                        clientCertPem = binding.clientCert.text.toString(),
-                        clientKeyPem = binding.clientKey.text.toString(),
+                        serverCertPem = binding.serverCertPem.text.toString(),
+                        clientCertPem = binding.clientCertPem.text.toString(),
+                        clientKeyPem = binding.clientKeyPem.text.toString(),
                     )
                 }
 
                 val inputWidgets = listOf(
                     binding.serverUrlLayout,
-                    binding.serverCertLayout,
-                    binding.clientCertLayout,
-                    binding.clientKeyLayout,
+                    binding.serverCertPemLayout,
+                    binding.clientCertPemLayout,
+                    binding.clientKeyPemLayout,
                     binding.scanBlitzQr,
                     binding.connect,
                 )
@@ -139,7 +192,7 @@ class AuthFragment : Fragment() {
                     model.saveConf { it.copy(authCompleted = true) }
                     findNavController().navigate(R.id.authFragment_toPaymentsFragment)
                 }.onFailure {
-                    val message = "Failed to connect to Core Lightning"
+                    val message = getString(R.string.failed_to_connect_to_core_lightning)
                     Log.e("auth", message, it)
                     Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                 }

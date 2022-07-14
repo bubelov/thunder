@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/connect_to_your_node" />
+        app:title="@string/connect_to_core_lightning" />
 
     <ScrollView
         android:id="@+id/scrollView"
@@ -43,48 +43,48 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/serverCertLayout"
+                android:id="@+id/serverCertPemLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="@string/server_certificate"
+                android:hint="@string/server_pem_certificate"
                 app:endIconDrawable="@drawable/baseline_qr_code_scanner_24"
                 app:endIconMode="custom">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/serverCert"
+                    android:id="@+id/serverCertPem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/clientCertLayout"
+                android:id="@+id/clientCertPemLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="@string/client_certificate"
+                android:hint="@string/client_pem_certificate"
                 app:endIconDrawable="@drawable/baseline_qr_code_scanner_24"
                 app:endIconMode="custom">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/clientCert"
+                    android:id="@+id/clientCertPem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/clientKeyLayout"
+                android:id="@+id/clientKeyPemLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:hint="@string/client_key"
+                android:hint="@string/client_pem_key"
                 app:endIconDrawable="@drawable/baseline_qr_code_scanner_24"
                 app:endIconMode="custom">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/clientKey"
+                    android:id="@+id/clientKeyPem"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
