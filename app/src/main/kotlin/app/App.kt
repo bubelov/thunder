@@ -1,6 +1,7 @@
 package app
 
 import android.app.Application
+import android.util.Log
 import db.database
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -13,9 +14,12 @@ import org.koin.dsl.module
 import org.koin.ksp.generated.defaultModule
 import org.torproject.jni.BuildConfig
 import sync.Sync
+import kotlin.time.ExperimentalTime
+import kotlin.time.measureTime
 
 class App : Application() {
 
+    @OptIn(ExperimentalTime::class)
     override fun onCreate() {
         super.onCreate()
 
@@ -27,6 +31,12 @@ class App : Application() {
         }
 
         val sync = get<Sync>()
-        GlobalScope.launch { sync.sync() }
+        GlobalScope.launch {
+            val syncTime = measureTime {
+                sync.sync()
+            }
+
+            Log.d("Sync", "Synced in $syncTime")
+        }
     }
 }

@@ -6,19 +6,19 @@
     <item
         android:id="@+id/paymentsFragment"
         android:icon="@drawable/baseline_bolt_24"
-        android:title="Payments"
+        android:title="@string/payments"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/channelsFragment"
         android:icon="@drawable/baseline_balance_24"
-        android:title="Channels"
+        android:title="@string/channels"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/nodeFragment"
         android:icon="@drawable/baseline_dynamic_form_24"
-        android:title="Node"
+        android:title="@string/node"
         app:showAsAction="ifRoom" />
 
 </menu>
