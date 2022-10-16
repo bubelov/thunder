@@ -18,4 +18,7 @@
     <string name="key_is_missing">Key is missing</string>
     <string name="failed_to_connect_to_core_lightning">Failed to connect to Core Lightning</string>
     <string name="node">Node</string>
+    <string name="bolt_11_invoice">BOLT-11 invoice</string>
+    <string name="pay">Pay</string>
+    <string name="amount">Amount</string>
 </resources>

@@ -2,15 +2,12 @@
 
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/authFragment">
 
     <fragment
         android:id="@+id/authFragment"
-        android:name="auth.AuthFragment"
-        android:label="AuthFragment"
-        tools:layout="@layout/fragment_auth">
+        android:name="auth.AuthFragment">
 
         <action
             android:id="@+id/authFragment_toPaymentsFragment"
@@ -22,20 +19,28 @@
 
     <fragment
         android:id="@+id/paymentsFragment"
-        android:name="payments.PaymentsFragment"
-        android:label="PaymentFragment"
-        tools:layout="@layout/fragment_payments" />
+        android:name="payments.PaymentsFragment">
+
+        <action
+            android:id="@+id/paymentsFragment_toPayFragment"
+            app:destination="@id/payFragment" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/channelsFragment"
-        android:name="channels.ChannelsFragment"
-        android:label="ChannelsFragment"
-        tools:layout="@layout/fragment_channels" />
+        android:name="channels.ChannelsFragment" />
 
     <fragment
         android:id="@+id/nodeFragment"
-        android:name="node.NodeFragment"
-        android:label="NodeFragment"
-        tools:layout="@layout/fragment_node" />
+        android:name="node.NodeFragment" />
+
+    <fragment
+        android:id="@+id/payFragment"
+        android:name="pay.PayFragment">
+        <argument
+            android:name="invoice"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

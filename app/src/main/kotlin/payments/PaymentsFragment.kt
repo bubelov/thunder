@@ -8,11 +8,11 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bubelov.thunder.R
 import com.bubelov.thunder.databinding.FragmentPaymentsBinding
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanIntentResult
-import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -52,7 +52,7 @@ class PaymentsFragment : Fragment() {
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
         binding.send.setOnClickListener {
-            invoiceScanner.launch(ScanOptions())
+            findNavController().navigate(R.id.paymentsFragment_toPayFragment)
         }
     }
 
