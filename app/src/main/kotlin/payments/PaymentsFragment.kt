@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bubelov.thunder.R
 import com.bubelov.thunder.databinding.FragmentPaymentsBinding
 import com.journeyapps.barcodescanner.ScanContract
@@ -37,6 +38,8 @@ class PaymentsFragment : Fragment() {
         }
     }
 
+    private val adapter = PaymentsAdapter()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -61,39 +64,35 @@ class PaymentsFragment : Fragment() {
             null -> {
                 progressIndicator.isVisible = true
                 progressMessage.isVisible = false
-                satsInChannels.isVisible = false
                 send.isVisible = false
-                receive.isVisible = false
             }
 
             is PaymentsModel.State.ConnectingToTor -> {
                 progressIndicator.isVisible = true
                 progressMessage.isVisible = true
                 progressMessage.text = state.status
-                satsInChannels.isVisible = false
                 send.isVisible = false
-                receive.isVisible = false
             }
 
             PaymentsModel.State.LoadingData -> {
                 progressIndicator.isVisible = true
                 progressMessage.isVisible = true
                 progressMessage.text = getString(R.string.loading_data)
-                satsInChannels.isVisible = false
                 send.isVisible = false
-                receive.isVisible = false
             }
 
             is PaymentsModel.State.DisplayingData -> {
                 progressIndicator.isVisible = false
                 progressMessage.isVisible = false
-                binding.satsInChannels.isVisible = true
-                binding.satsInChannels.text = getString(
+                binding.toolbar.title = getString(
                     R.string.s_sats,
                     NumberFormat.getNumberInstance().format(state.totalSats),
                 )
                 binding.send.isVisible = true
-                binding.receive.isVisible = true
+
+                binding.list.layoutManager = LinearLayoutManager(requireContext())
+                binding.list.adapter = adapter
+                adapter.submitList(state.payments)
             }
         }
     }

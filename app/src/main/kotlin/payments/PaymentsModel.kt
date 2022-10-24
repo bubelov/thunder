@@ -42,10 +42,24 @@ class PaymentsModel(
 
             if (lastSyncDate.isNotBlank()) {
                 val channels = db.channelQueries.selectAll().asFlow().mapToList().first()
-                _state.update { State.DisplayingData(channels.sumOf { it.ourAmountMsat } / 1000) }
+                val transactions = withContext(Dispatchers.IO) {
+                    apiController.api.value!!.listTransactions(NodeOuterClass.ListtransactionsRequest.getDefaultInstance())
+                }
+                _state.update {
+                    State.DisplayingData(channels.sumOf { it.ourAmountMsat } / 1000,
+                        transactions.transactionsList.sortedByDescending { it.blockheight }.map {
+                            PaymentsAdapter.Item(
+                                text = it.hash.toByteArray().toHex(),
+                                type = ""
+                            )
+                        })
+                }
             }
         }.launchIn(viewModelScope)
     }
+
+    fun ByteArray.toHex(): String =
+        joinToString(separator = "") { eachByte -> "%02x".format(eachByte) }
 
     suspend fun pay(invoice: String) {
         Log.d("payments", "Paying invoice $invoice")
@@ -64,6 +78,9 @@ class PaymentsModel(
     sealed class State {
         data class ConnectingToTor(val status: String) : State()
         object LoadingData : State()
-        data class DisplayingData(val totalSats: Long) : State()
+        data class DisplayingData(
+            val totalSats: Long,
+            val payments: List<PaymentsAdapter.Item>,
+        ) : State()
     }
 }

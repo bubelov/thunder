@@ -40,6 +40,10 @@ class Sync(
 
         apiController.api.value?.apply {
             runCatching {
+                val transactions = listTransactions(NodeOuterClass.ListtransactionsRequest.getDefaultInstance())
+
+                println(transactions.transactionsCount)
+
                 val funds = withContext(Dispatchers.IO) {
                     listFunds(NodeOuterClass.ListfundsRequest.getDefaultInstance())
                 }
